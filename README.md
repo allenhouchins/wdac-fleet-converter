@@ -1,4 +1,4 @@
-# WDAC to Fleet Converter
+# Application Control for Business (formerly WDAC) to Fleet Converter
 
 A web-based tool that converts Windows Defender Application Control (WDAC) policy XML files into Fleet-compatible MDM (Mobile Device Management) format for easy deployment.
 
