@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDAC to Fleet Converter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ WDAC to Fleet Converter</h1>
+            <p class="subtitle">Convert your Windows Defender Application Control (WDAC) policies to Fleet-compatible MDM format</p>
+        </header>
+
+        <div class="steps-info">
+            <h2>How to Create and Export Your WDAC Policy</h2>
+            <div class="instructions">
+                <h3>Step 1: Create WDAC Policy</h3>
+                <p>You can create WDAC policies using:</p>
+                <ul>
+                    <li><strong>PowerShell:</strong> Use <code>New-CIPolicy</code> cmdlets to create policies</li>
+                    <li><strong>WDAC Wizard:</strong> Use the Windows Defender Application Control Wizard (available as a download)</li>
+                    <li><strong>ConfigCI:</strong> Use the ConfigCI PowerShell module</li>
+                </ul>
+
+                <h3>Step 2: Export the Policy</h3>
+                <p>Export your WDAC policy to XML format:</p>
+                <ul>
+                    <li><strong>PowerShell:</strong> Use <code>Export-CIPolicy -FilePath policy.xml</code> to export an existing policy</li>
+                    <li><strong>Or:</strong> If you created a policy using the wizard, it should already be in XML format</li>
+                </ul>
+
+                <h3>Step 3: Convert Using This Tool</h3>
+                <p>Upload or paste your WDAC policy XML file below. The tool will convert it to Fleet-compatible SyncML format for MDM deployment.</p>
+                
+                <h3>Step 4: Verify Policy Deployment</h3>
+                <p>After deploying via Fleet, verify the policy is applied:</p>
+                <ul>
+                    <li><strong>In Fleet:</strong> Check policy status and device compliance in the Fleet console</li>
+                    <li><strong>Test (Most Reliable):</strong> Try running a blocked application - if you see a block message, the policy is working correctly</li>
+                    <li><strong>PowerShell:</strong> Run <code>Get-CIPolicy</code> to view applied WDAC policies</li>
+                    <li><strong>Event Viewer:</strong> Check Applications and Services Logs → Microsoft → Windows → Code Integrity → Operational for policy events</li>
+                </ul>
+                
+                <div class="important-note">
+                    <strong>⚠️ Important:</strong> WDAC policies are system-wide and more restrictive than AppLocker. Always test on a small group before deploying organization-wide. Some policy changes may require a device reboot.
+                </div>
+            </div>
+        </div>
+
+        <div class="converter-section">
+            <div class="input-section">
+                <h2>Step 1: Input WDAC Policy XML</h2>
+                <div class="input-options">
+                    <label class="file-upload">
+                        <input type="file" id="fileInput" accept=".xml" />
+                        <span class="upload-button">📁 Upload XML File</span>
+                    </label>
+                    <span class="divider">or</span>
+                    <button id="pasteBtn" class="paste-button">📋 Paste XML</button>
+                </div>
+                <textarea id="xmlInput" placeholder="Paste your WDAC policy XML here, or upload a file above..."></textarea>
+            </div>
+
+            <div class="options-section">
+                <h2>Step 2: Policy Configuration</h2>
+                <p class="help-text">Configure your WDAC policy deployment settings:</p>
+                <div class="grouping-section">
+                    <label for="policyGuid">Policy GUID:</label>
+                    <input type="text" id="policyGuid" value="" placeholder="Enter or generate a GUID">
+                    <span class="help-text-small">Unique identifier for this policy (required). Generate with PowerShell: <code>[guid]::NewGuid()</code></span>
+                </div>
+                <div class="grouping-section">
+                    <label for="policyName">Policy Name (optional):</label>
+                    <input type="text" id="policyName" value="" placeholder="MyWDACPolicy">
+                    <span class="help-text-small">Friendly name for this policy</span>
+                </div>
+            </div>
+
+            <div class="action-section">
+                <button id="convertBtn" class="convert-button" disabled>🔄 Convert to Fleet Format</button>
+                <button id="downloadBtn" class="download-button" disabled>💾 Download SyncML File</button>
+            </div>
+
+            <div class="output-section" id="outputSection" style="display: none;">
+                <h2>Step 3: Preview Output</h2>
+                <div class="output-controls">
+                    <button id="copyBtn" class="copy-button">📋 Copy to Clipboard</button>
+                    <button id="clearBtn" class="clear-button">🗑️ Clear</button>
+                </div>
+                <pre id="output"><code></code></pre>
+            </div>
+
+            <div class="error-section" id="errorSection" style="display: none;">
+                <div class="error-message" id="errorMessage"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made for Windows admins deploying WDAC policies via Fleet</p>
+            <p class="docs-link">
+                <a href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control" target="_blank">
+                    📚 Microsoft WDAC Documentation
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
